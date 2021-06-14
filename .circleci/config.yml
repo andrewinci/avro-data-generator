@@ -16,7 +16,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "4a:a4:d9:c9:0b:4f:04:b7:78:df:31:88:7c:20:08:50"
+            - "32:e8:bf:a4:1a:21:0a:b3:51:5a:d0:cd:51:e3:e2:ea"
       - run:
           name: Clone
           command: |
