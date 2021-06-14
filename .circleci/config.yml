@@ -1,0 +1,92 @@
+version: 2.1
+
+orbs:
+  snyk: snyk/snyk@0.0.13
+
+parameters:
+  owner-repo:
+    type: string
+    default: "andrewinci/avro-data-generator"
+
+jobs:
+  standard-version:
+    docker:
+      - image: circleci/node:latest
+    working_directory: ~/repo
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "4a:a4:d9:c9:0b:4f:04:b7:78:df:31:88:7c:20:08:50"
+      - run:
+          name: Clone
+          command: |
+            mkdir -p ~/.ssh/
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            git clone git@github.com:<< pipeline.parameters.owner-repo >>.git .
+      - run:
+          name: Auto release
+          command: |
+            git config --global user.email "deployment@bot.com"
+            git config --global user.name "Deployment Bot"
+            npx standard-version --releaseCommitMessageFormat "chore(release): {{currentTag}}[ci skip]"
+            git push --follow-tags
+  build:
+    docker:
+      - image: circleci/openjdk:11-jdk
+    parameters:
+      publish:
+        type: boolean
+        default: false
+    working_directory: ~/repo
+    environment:
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "build.sbt" }}
+            - v1-dependencies-
+      - run:
+          name: Run tests
+          command: sbt clean coverage test
+      - when:
+          condition: << parameters.publish >>
+          steps:
+            - run:
+                name: Publish
+                command: sbt "set version := \"$(echo $CIRCLE_TAG | cut -c 2- )\"" publish
+      # Add the env COVERALLS_REPO_TOKEN=my-token to the circleci build env
+      # to enable code coverage reporting
+      #      - run:
+      #          name: Collect coverage
+      #          command: sbt coverageReport coveralls
+      - save_cache:
+          paths:
+            - ~/.sbt
+          key: v2-dependencies-{{ checksum "build.sbt" }}
+      # Add SNYK_TOKEN in circle ci to enable the scan
+      #      - snyk/scan:
+      #          severity-threshold: high
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          name: CI
+          publish: false
+          filters:
+            tags:
+              ignore: /.*/
+      - standard-version:
+          requires:
+            - CI
+      - build:
+          name: Release
+          publish: true
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v\d+\.\d+\.\d+$/
