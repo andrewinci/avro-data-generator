@@ -1,0 +1,14 @@
+{
+  "template": "https://github.com/andrewinci/scala-library-template.git",
+  "commit": "8d5670efd3c7d4171adf0fa75fd3f2a0d1a7b877",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "repo_name": "avro-data-generator",
+      "github_owner": "andrewinci",
+      "organization": "com.github.andrewinci",
+      "_template": "https://github.com/andrewinci/scala-library-template.git"
+    }
+  },
+  "directory": null
+}
