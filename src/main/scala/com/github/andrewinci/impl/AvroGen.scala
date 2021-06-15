@@ -2,14 +2,14 @@ package com.github.andrewinci.impl
 
 import com.github.andrewinci.core.AvroGenerator
 import com.github.andrewinci.core.AvroGeneratorException
-import com.github.andrewinci.core.FieldGenerator
+import com.github.andrewinci.core.AvroFieldGenerator
 import com.github.andrewinci.core.NotImplementedException
 import org.apache.avro.Schema
 import org.apache.avro.Schema.Type
 import org.apache.avro.generic.GenericRecord
 import org.apache.avro.generic.GenericData
 
-class AvroGen(val fieldGenerator: FieldGenerator) extends AvroGenerator {
+class AvroGen(val fieldGenerator: AvroFieldGenerator) extends AvroGenerator {
 
   /** Generate a random avro record
     *
@@ -21,7 +21,10 @@ class AvroGen(val fieldGenerator: FieldGenerator) extends AvroGenerator {
       Left(new AvroGeneratorException("Only RECORD is supported"))
     else generateRecord(schema, fieldGenerator)
 
-  def generateRecord(schema: Schema, fieldGenerator: FieldGenerator): Either[AvroGeneratorException, GenericRecord] = {
+  def generateRecord(
+      schema: Schema,
+      fieldGenerator: AvroFieldGenerator
+  ): Either[AvroGeneratorException, GenericRecord] = {
     val record = new GenericData.Record(schema)
     schema.getFields.forEach(field => {
       fieldGenerator.getGenerator(field.name()) match {
@@ -38,7 +41,7 @@ class AvroGen(val fieldGenerator: FieldGenerator) extends AvroGenerator {
     else Left(new AvroGeneratorException(s"Invalid avro generated"))
   }
 
-  def generateValue(schema: Schema, fieldGenerator: FieldGenerator): Either[AvroGeneratorException, Any] = {
+  def generateValue(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] = {
     schema.getType match {
       // complex data types
       case Type.RECORD => generateRecord(schema, fieldGenerator)
@@ -56,5 +59,5 @@ class AvroGen(val fieldGenerator: FieldGenerator) extends AvroGenerator {
 }
 
 object AvroGen {
-  def apply(fieldGenerator: FieldGenerator): AvroGen = new AvroGen(fieldGenerator)
+  def apply(fieldGenerator: AvroFieldGenerator): AvroGen = new AvroGen(fieldGenerator)
 }

@@ -1,5 +1,6 @@
 package com.github.andrewinci.impl
 
+import com.github.andrewinci.generators.ConstFieldGen
 import munit.FunSuite
 import org.apache.avro.Schema
 

@@ -2,7 +2,7 @@ package com.github.andrewinci.core
 
 import org.apache.avro.Schema
 
-trait SchemaProvider {
+trait AvroSchemaProvider {
 
   /** Retrieve the latest schema available
     * for the provided subject

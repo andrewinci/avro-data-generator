@@ -2,9 +2,9 @@ package com.github.andrewinci.core
 
 import org.apache.avro.Schema
 
-trait FieldGenerator {
+trait AvroFieldGenerator {
 
-  def getGenerator(fieldName: String): Option[FieldGenerator]
+  def getGenerator(fieldName: String): Option[AvroFieldGenerator]
 
   def generate(schema: Schema): Either[FieldGeneratorException, Any]
 }

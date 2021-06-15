@@ -1,10 +1,9 @@
-package com.github.andrewinci.impl
+package com.github.andrewinci.generators
 
-import com.github.andrewinci.core.FieldGenerator
+import com.github.andrewinci.core.AvroFieldGenerator
 import com.github.andrewinci.core.FieldGeneratorException
 import org.apache.avro.LogicalTypes.Decimal
 import org.apache.avro.Conversions
-import org.apache.avro.LogicalType
 import org.apache.avro.Schema
 import org.apache.avro.Schema.Type
 import org.apache.avro.generic.GenericData
@@ -17,8 +16,8 @@ class ConstFieldGen(
     constDecimal: BigDecimal = 0.1,
     constBoolean: Boolean = true,
     constBytes: Array[Byte] = Array[Byte](1.toByte, 2.toByte, 3, 4)
-) extends FieldGenerator {
-  override def getGenerator(fieldName: String): Option[FieldGenerator] = Some(this)
+) extends AvroFieldGenerator {
+  override def getGenerator(fieldName: String): Option[AvroFieldGenerator] = Some(this)
 
   override def generate(schema: Schema): Either[FieldGeneratorException, Any] =
     Option(schema.getLogicalType) match {
