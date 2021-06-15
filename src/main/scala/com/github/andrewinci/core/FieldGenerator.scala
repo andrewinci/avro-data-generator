@@ -6,5 +6,5 @@ trait FieldGenerator {
 
   def getGenerator(fieldName: String): Option[FieldGenerator]
 
-  def generate(schema: Schema): Object
+  def generate(schema: Schema): Either[FieldGeneratorException, Any]
 }

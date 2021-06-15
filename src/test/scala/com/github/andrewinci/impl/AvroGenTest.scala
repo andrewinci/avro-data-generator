@@ -10,19 +10,13 @@ class AvroGenTest extends FunSuite {
     // arrange
     val sampleSchema = """{"type": "record", "name": "myrec","fields": [{ "name": "original", "type": "string" }]}"""
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    var fieldGenerator: Option[FieldGenerator] = None
-    fieldGenerator = Some(new FieldGenerator {
-      override def getGenerator(fieldName: String): Option[FieldGenerator] = fieldGenerator
-
-      override def generate(schema: Schema): AnyRef = "1"
-    })
-
-    val sut = AvroGen(fieldGenerator.get)
+    val fieldGenerator = new ConstFieldGen(str = "hello1")
+    val sut = AvroGen(fieldGenerator)
     // act
     val record = sut.generateRandomAvro(schema)
     // assert
     assert(record.isRight)
-    assertEquals(record.right.get.toString, """{"original": "1"}""")
+    assertEquals(record.right.get.toString, """{"original": "hello1"}""")
   }
 
   test("Gen nested record happy path") {
@@ -33,19 +27,33 @@ class AvroGenTest extends FunSuite {
         |{ "name": "nested", "type": "string" }]}
         |}]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    var fieldGenerator: Option[FieldGenerator] = None
-    fieldGenerator = Some(new FieldGenerator {
-      override def getGenerator(fieldName: String): Option[FieldGenerator] = fieldGenerator
+    val fieldGenerator = new ConstFieldGen(str = "hello")
 
-      override def generate(schema: Schema): AnyRef = "1"
-    })
-
-    val sut = AvroGen(fieldGenerator.get)
+    val sut = AvroGen(fieldGenerator)
     // act
     val record = sut.generateRandomAvro(schema)
     // assert
     assert(record.isRight)
-    assertEquals(record.right.get.toString, """{"original": {"nested": "1"}}""")
+    assertEquals(record.right.get.toString, """{"original": {"nested": "hello"}}""")
   }
 
+  test("Gen happy path  - enum") {
+    // arrange
+    val sampleSchema =
+      """{"type": "record", "name": "myrec","fields": [
+        |{ "name": "original", "type": {
+        |  "type": "enum",
+        |  "name": "Suit",
+        |  "symbols" : ["SPADES", "HEARTS", "DIAMONDS", "CLUBS"]
+        |}}
+        |]}""".stripMargin
+    val schema: Schema = new Schema.Parser().parse(sampleSchema)
+    val fieldGenerator = new ConstFieldGen(str = "hello1")
+    val sut = AvroGen(fieldGenerator)
+    // act
+    val record = sut.generateRandomAvro(schema)
+    // assert
+    assert(record.isRight, record)
+    assertEquals(record.right.get.toString, """{"original": "SPADES"}""")
+  }
 }
