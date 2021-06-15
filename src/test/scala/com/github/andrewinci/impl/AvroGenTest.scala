@@ -10,7 +10,7 @@ class AvroGenTest extends FunSuite {
     // arrange
     val sampleSchema = """{"type": "record", "name": "myrec","fields": [{ "name": "original", "type": "string" }]}"""
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstFieldGen(str = "hello1")
+    val fieldGenerator = new ConstFieldGen(constStr = "hello1")
     val sut = AvroGen(fieldGenerator)
     // act
     val record = sut.generateRandomAvro(schema)
@@ -27,7 +27,7 @@ class AvroGenTest extends FunSuite {
         |{ "name": "nested", "type": "string" }]}
         |}]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstFieldGen(str = "hello")
+    val fieldGenerator = new ConstFieldGen(constStr = "hello")
 
     val sut = AvroGen(fieldGenerator)
     // act
@@ -48,7 +48,7 @@ class AvroGenTest extends FunSuite {
         |}}
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstFieldGen(str = "hello1")
+    val fieldGenerator = new ConstFieldGen(constStr = "hello1")
     val sut = AvroGen(fieldGenerator)
     // act
     val record = sut.generateRandomAvro(schema)

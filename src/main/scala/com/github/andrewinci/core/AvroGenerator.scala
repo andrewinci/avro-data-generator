@@ -4,12 +4,12 @@ import org.apache.avro.Schema
 import org.apache.avro.generic.GenericRecord
 
 trait AvroGenerator {
-  /**
-   * Generate a random avro record
-   *
-   * @param schema the avro schema to use to generate the record
-   * @return a random record with the provided schema
-   */
+
+  /** Generate a random avro record
+    *
+    * @param schema the avro schema to use to generate the record
+    * @return a random record with the provided schema
+    */
   def generateRandomAvro(schema: Schema): Either[AvroGeneratorException, GenericRecord]
 
   //
