@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/andrewinci/avro-data-generator/compare/v1.1.0...v1.2.0) (2021-06-16)
+
+
+### Features
+
+* Add array gen ([0bbeee5](https://github.com/andrewinci/avro-data-generator/commit/0bbeee591b1d25165fd3f0a0e57187aa8b94b6ee))
+* Add composition function for generators ([d2036e8](https://github.com/andrewinci/avro-data-generator/commit/d2036e89bc5de4b7d0a28f61960b5a4aebd06320))
+
+
+### Bug Fixes
+
+* AvroFieldGenerator.fromMap ([3d6f576](https://github.com/andrewinci/avro-data-generator/commit/3d6f576a2f0981218f95ebfa007a30bb8ef17c4c))
+
 ## [1.1.0](https://github.com/andrewinci/avro-data-generator/compare/v1.0.1...v1.1.0) (2021-06-16)
 
 
