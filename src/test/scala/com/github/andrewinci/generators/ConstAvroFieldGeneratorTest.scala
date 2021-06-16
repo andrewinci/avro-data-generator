@@ -1,6 +1,6 @@
 package com.github.andrewinci.generators
 
-import com.github.andrewinci.impl.AvroGen
+import com.github.andrewinci.AvroGenerator
 import munit.FunSuite
 import org.apache.avro.Schema
 
@@ -21,7 +21,7 @@ class ConstAvroFieldGeneratorTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = new ConstAvroFieldGenerator(constDecimal = 12.23)
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert

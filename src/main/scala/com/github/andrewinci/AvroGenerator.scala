@@ -1,16 +1,17 @@
-package com.github.andrewinci.impl
+package com.github.andrewinci
 
-import com.github.andrewinci.core.AvroRecordGenerator
-import com.github.andrewinci.core.AvroGeneratorException
 import com.github.andrewinci.core.AvroFieldGenerator
+import com.github.andrewinci.core.AvroGeneratorException
+import com.github.andrewinci.core.AvroRecordGenerator
 import com.github.andrewinci.core.NotImplementedException
 import org.apache.avro.Schema
 import org.apache.avro.Schema.Type
-import org.apache.avro.generic.GenericRecord
 import org.apache.avro.generic.GenericData
+import org.apache.avro.generic.GenericRecord
+
 import scala.collection.JavaConverters._
 
-class AvroGen(val fieldGenerator: AvroFieldGenerator) extends AvroRecordGenerator {
+class AvroGenerator(val fieldGenerator: AvroFieldGenerator) extends AvroRecordGenerator {
 
   /** Generate a random avro record
     *
@@ -79,6 +80,6 @@ class AvroGen(val fieldGenerator: AvroFieldGenerator) extends AvroRecordGenerato
   }
 }
 
-object AvroGen {
-  def apply(fieldGenerator: AvroFieldGenerator): AvroGen = new AvroGen(fieldGenerator)
+object AvroGenerator {
+  def apply(fieldGenerator: AvroFieldGenerator): AvroGenerator = new AvroGenerator(fieldGenerator)
 }

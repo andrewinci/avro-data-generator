@@ -1,22 +1,18 @@
-package com.github.andrewinci.impl
+package com.github.andrewinci
 
-import com.github.andrewinci.core.AvroFieldGenerator
 import com.github.andrewinci.generators.AvroFieldGenerator
 import com.github.andrewinci.generators.ConstAvroFieldGenerator
-import com.github.andrewinci.generators.helpers.AvroFieldGeneratorLeaf
-import com.github.andrewinci.generators.helpers.AvroFieldGeneratorNode
-import com.github.andrewinci.generators.helpers.Compose.compose
 import munit.FunSuite
 import org.apache.avro.Schema
 
-class AvroGenTest extends FunSuite {
+class AvroGeneratorTest extends FunSuite {
 
   test("Gen happy path") {
     // arrange
     val sampleSchema = """{"type": "record", "name": "myrec","fields": [{ "name": "original", "type": "string" }]}"""
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = new ConstAvroFieldGenerator(constStr = "hello1")
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -34,7 +30,7 @@ class AvroGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = new ConstAvroFieldGenerator(constStr = "hello")
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -54,7 +50,7 @@ class AvroGenTest extends FunSuite {
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = new ConstAvroFieldGenerator(constStr = "hello1")
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -71,7 +67,7 @@ class AvroGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = AvroFieldGenerator.fromMap("original" -> (_ => Right(false)))
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -88,7 +84,7 @@ class AvroGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = AvroFieldGenerator.fromMap("original" -> (_ => Right(1.6)))
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -104,7 +100,7 @@ class AvroGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = AvroFieldGenerator.fromMap("unlistedField" -> (_ => Right(1.6)))
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -120,7 +116,7 @@ class AvroGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = AvroFieldGenerator.fromMap("original" -> (_ => Right("1231")))
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -137,7 +133,7 @@ class AvroGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = AvroFieldGenerator.fromMap("original" -> (_ => Right(null)))
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -157,7 +153,7 @@ class AvroGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = AvroFieldGenerator.fromMap("original.0" -> (_ => Right("test1")))
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -181,7 +177,7 @@ class AvroGenTest extends FunSuite {
       "original.2" -> (_ => Right("test2"))
     )
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert

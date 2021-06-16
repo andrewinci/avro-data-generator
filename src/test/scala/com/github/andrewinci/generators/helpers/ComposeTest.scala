@@ -1,10 +1,9 @@
 package com.github.andrewinci.generators.helpers
 
+import com.github.andrewinci.AvroGenerator
 import com.github.andrewinci.generators.AvroFieldGenerator
 import com.github.andrewinci.generators.ConstAvroFieldGenerator
 import com.github.andrewinci.generators.helpers.Compose.compose
-import com.github.andrewinci.impl.AvroGen
-
 import munit.FunSuite
 import org.apache.avro.Schema
 
@@ -21,7 +20,7 @@ class ComposeTest extends FunSuite {
       AvroFieldGenerator.fromMap("f1" -> (_ => Right("test"))),
       new ConstAvroFieldGenerator(constStr = "default")
     )
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -43,7 +42,7 @@ class ComposeTest extends FunSuite {
       AvroFieldGenerator.fromMap("original.nested1" -> (_ => Right("test"))),
       new ConstAvroFieldGenerator(constInt = 123)
     )
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -63,7 +62,7 @@ class ComposeTest extends FunSuite {
       new ConstAvroFieldGenerator(constStr = "str")
     )
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
@@ -83,7 +82,7 @@ class ComposeTest extends FunSuite {
       AvroFieldGenerator.fromMap("original" -> (_ => Right(false)))
     )
 
-    val sut = AvroGen(fieldGenerator)
+    val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
     // assert
