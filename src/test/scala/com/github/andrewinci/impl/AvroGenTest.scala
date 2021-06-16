@@ -91,4 +91,54 @@ class AvroGenTest extends FunSuite {
     // assert
     assert(record.isLeft)
   }
+
+  test("Gen return left if no generator is available for a specific field") {
+    // arrange
+    val sampleSchema =
+      """{"type": "record", "name": "myrec","fields": [
+        |{ "name": "original", "type": ["string", "boolean"] }
+        |]}""".stripMargin
+    val schema: Schema = new Schema.Parser().parse(sampleSchema)
+    val fieldGenerator = AvroFieldGeneratorLeaf(_ => Right(1.6))
+
+    val sut = AvroGen(fieldGenerator)
+    // act
+    val record = sut.generateRecord(schema)
+    // assert
+    assert(record.isLeft)
+  }
+
+  test("Gen - union - respect the type") {
+    // arrange
+    val sampleSchema =
+      """{"type": "record", "name": "myrec","fields": [
+        |{ "name": "original", "type": ["string", "int"] }
+        |]}""".stripMargin
+    val schema: Schema = new Schema.Parser().parse(sampleSchema)
+    val fieldGenerator = AvroFieldGeneratorNode("original", AvroFieldGeneratorLeaf(_ => Right("1231")))
+
+    val sut = AvroGen(fieldGenerator)
+    // act
+    val record = sut.generateRecord(schema)
+    // assert
+    assert(record.isRight)
+    assertEquals(record.right.get.toString, """{"original": "1231"}""")
+  }
+
+  test("Gen - union - set null") {
+    // arrange
+    val sampleSchema =
+      """{"type": "record", "name": "myrec","fields": [
+        |{ "name": "original", "type": ["string", "null"] }
+        |]}""".stripMargin
+    val schema: Schema = new Schema.Parser().parse(sampleSchema)
+    val fieldGenerator = AvroFieldGeneratorNode("original", AvroFieldGeneratorLeaf(_ => Right(null)))
+
+    val sut = AvroGen(fieldGenerator)
+    // act
+    val record = sut.generateRecord(schema)
+    // assert
+    assert(record.isRight)
+    assertEquals(record.right.get.toString, """{"original": null}""")
+  }
 }

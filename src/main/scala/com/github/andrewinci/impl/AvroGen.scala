@@ -63,7 +63,7 @@ class AvroGen(val fieldGenerator: AvroFieldGenerator) extends AvroGenerator {
       case Type.ENUM | Type.STRING | Type.BYTES | Type.INT | Type.LONG | Type.FLOAT | Type.DOUBLE | Type.BOOLEAN =>
         fieldGenerator.generate(schema)
       // just null
-      case Type.NULL => null
+      case Type.NULL => fieldGenerator.generate(schema)
     }
   }
 }
