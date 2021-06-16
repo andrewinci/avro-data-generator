@@ -26,6 +26,7 @@ class ConstAvroFieldGenerator(
         schema.getType match {
           case Type.RECORD | Type.ARRAY | Type.MAP | Type.UNION | Type.FIXED =>
             Left(new FieldGeneratorException(s"Unable to generate a field of type ${schema.getType.getName}"))
+          // only primitive types are supported
           case Type.ENUM    => Right(new GenericData.EnumSymbol(schema, schema.getEnumSymbols.get(0)))
           case Type.BYTES   => Right(ByteBuffer.wrap(constBytes))
           case Type.STRING  => Right(constStr)
