@@ -1,7 +1,11 @@
 package com.github.andrewinci.impl
 
+import com.github.andrewinci.core.AvroFieldGenerator
 import com.github.andrewinci.generators.AvroFieldGenerator
 import com.github.andrewinci.generators.ConstAvroFieldGenerator
+import com.github.andrewinci.generators.helpers.AvroFieldGeneratorLeaf
+import com.github.andrewinci.generators.helpers.AvroFieldGeneratorNode
+import com.github.andrewinci.generators.helpers.Compose.compose
 import munit.FunSuite
 import org.apache.avro.Schema
 
@@ -139,5 +143,49 @@ class AvroGenTest extends FunSuite {
     // assert
     assert(record.isRight)
     assertEquals(record.right.get.toString, """{"original": null}""")
+  }
+
+  test("Gen - array - happy path") {
+    // arrange
+    val sampleSchema =
+      """{"type": "record", "name": "myrec","fields": [
+        |{ "name": "original", "type": {
+        |  "type": "array",
+        |  "items" : "string"  
+        | }}
+        |]}""".stripMargin
+    val schema: Schema = new Schema.Parser().parse(sampleSchema)
+    val fieldGenerator = AvroFieldGenerator.fromMap("original.0" -> (_ => Right("test1")))
+
+    val sut = AvroGen(fieldGenerator)
+    // act
+    val record = sut.generateRecord(schema)
+    // assert
+    assert(record.isRight)
+    assertEquals(record.right.get.toString, """{"original": ["test1"]}""")
+  }
+
+  test("Gen - array - happy path - multiple elements") {
+    // arrange
+    val sampleSchema =
+      """{"type": "record", "name": "myrec","fields": [
+        |{ "name": "original", "type": {
+        |  "type": "array",
+        |  "items" : "string"  
+        | }}
+        |]}""".stripMargin
+    val schema: Schema = new Schema.Parser().parse(sampleSchema)
+    val leaf = Range(0, 3)
+      .map(i => i -> AvroFieldGeneratorLeaf(_ => Right(s"test$i")))
+      .map(l => AvroFieldGeneratorNode(l._1.toString, l._2).asInstanceOf[AvroFieldGenerator])
+      .reduce((g1, g2) => compose(g1, g2))
+    val fieldGenerator = AvroFieldGeneratorNode("original", leaf)
+
+    val sut = AvroGen(fieldGenerator)
+    // act
+    val record = sut.generateRecord(schema)
+    // assert
+    assert(record.isRight)
+    assertEquals(record.right.get.toString, """{"original": ["test0", "test1", "test2"]}""")
   }
 }

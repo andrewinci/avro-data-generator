@@ -51,13 +51,24 @@ class AvroGen(val fieldGenerator: AvroFieldGenerator) extends AvroRecordGenerato
       .find(_.isRight)
       .getOrElse(Left(new AvroGeneratorException("Unable to build any value in the UNION")))
 
+  def generateArray(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] = {
+    val res = Stream
+      .from(0)
+      .map(i => fieldGenerator.getGenerator(i.toString))
+      .takeWhile(_.isDefined)
+      .map(g => generateValue(schema.getElementType, g.get))
+    if (res.exists(_.isLeft))
+      Left(new AvroGeneratorException(s"Unable to generate ARRAY of ${schema.getElementType.getName}"))
+    else Right(seqAsJavaList(res.map(_.right.get)))
+  }
+
   def generateValue(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] = {
     schema.getType match {
       // complex data types
       case Type.RECORD => generateRecord(schema, fieldGenerator)
       case Type.UNION  => generateUnion(schema, fieldGenerator)
+      case Type.ARRAY  => generateArray(schema, fieldGenerator)
       case Type.MAP    => Left(new NotImplementedException("MAP type not supported"))
-      case Type.ARRAY  => Left(new NotImplementedException("ARRAY type not supported"))
       case Type.FIXED  => Left(new NotImplementedException("FIXED type not supported"))
       // primitive
       case Type.ENUM | Type.STRING | Type.BYTES | Type.INT | Type.LONG | Type.FLOAT | Type.DOUBLE | Type.BOOLEAN =>
