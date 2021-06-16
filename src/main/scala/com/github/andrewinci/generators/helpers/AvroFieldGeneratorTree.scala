@@ -1,4 +1,4 @@
-package com.github.andrewinci.helpers
+package com.github.andrewinci.generators.helpers
 
 import com.github.andrewinci.core.AvroFieldGenerator
 import com.github.andrewinci.core.FieldGeneratorException

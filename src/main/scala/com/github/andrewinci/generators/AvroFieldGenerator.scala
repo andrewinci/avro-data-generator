@@ -1,8 +1,8 @@
 package com.github.andrewinci.generators
 
 import com.github.andrewinci.core.FieldGeneratorException
-import com.github.andrewinci.helpers.AvroFieldGeneratorLeaf
-import com.github.andrewinci.helpers.AvroFieldGeneratorNode
+import com.github.andrewinci.generators.helpers.AvroFieldGeneratorLeaf
+import com.github.andrewinci.generators.helpers.AvroFieldGeneratorNode
 import org.apache.avro.Schema
 
 object AvroFieldGenerator {
