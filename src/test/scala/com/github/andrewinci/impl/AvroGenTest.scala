@@ -15,7 +15,7 @@ class AvroGenTest extends FunSuite {
     val fieldGenerator = new ConstFieldGen(constStr = "hello1")
     val sut = AvroGen(fieldGenerator)
     // act
-    val record = sut.generateRandomAvro(schema)
+    val record = sut.generateRecord(schema)
     // assert
     assert(record.isRight)
     assertEquals(record.right.get.toString, """{"original": "hello1"}""")
@@ -33,7 +33,7 @@ class AvroGenTest extends FunSuite {
 
     val sut = AvroGen(fieldGenerator)
     // act
-    val record = sut.generateRandomAvro(schema)
+    val record = sut.generateRecord(schema)
     // assert
     assert(record.isRight)
     assertEquals(record.right.get.toString, """{"original": {"nested": "hello"}}""")
@@ -53,7 +53,7 @@ class AvroGenTest extends FunSuite {
     val fieldGenerator = new ConstFieldGen(constStr = "hello1")
     val sut = AvroGen(fieldGenerator)
     // act
-    val record = sut.generateRandomAvro(schema)
+    val record = sut.generateRecord(schema)
     // assert
     assert(record.isRight, record)
     assertEquals(record.right.get.toString, """{"original": "SPADES"}""")
@@ -70,7 +70,7 @@ class AvroGenTest extends FunSuite {
 
     val sut = AvroGen(fieldGenerator)
     // act
-    val record = sut.generateRandomAvro(schema)
+    val record = sut.generateRecord(schema)
     // assert
     assert(record.isRight)
     assertEquals(record.right.get.toString, """{"original": false}""")
@@ -87,7 +87,7 @@ class AvroGenTest extends FunSuite {
 
     val sut = AvroGen(fieldGenerator)
     // act
-    val record = sut.generateRandomAvro(schema)
+    val record = sut.generateRecord(schema)
     // assert
     assert(record.isLeft)
   }

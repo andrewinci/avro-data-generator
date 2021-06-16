@@ -23,7 +23,7 @@ class ConstFieldGenTest extends FunSuite {
 
     val sut = AvroGen(fieldGenerator)
     // act
-    val record = sut.generateRandomAvro(schema)
+    val record = sut.generateRecord(schema)
     // assert
     assert(record.isRight)
     assertNotEquals(record.right.get.get("original").asInstanceOf[ByteBuffer].array().length, 0)

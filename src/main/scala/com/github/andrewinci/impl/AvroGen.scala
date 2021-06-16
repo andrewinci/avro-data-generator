@@ -17,7 +17,7 @@ class AvroGen(val fieldGenerator: AvroFieldGenerator) extends AvroGenerator {
     * @param schema the avro schema to use to generate the record
     * @return a random record with the provided schema
     */
-  override def generateRandomAvro(schema: Schema): Either[AvroGeneratorException, GenericRecord] =
+  override def generateRecord(schema: Schema): Either[AvroGeneratorException, GenericRecord] =
     if (schema.getType != Type.RECORD)
       Left(new AvroGeneratorException("Only RECORD is supported"))
     else generateRecord(schema, fieldGenerator)
