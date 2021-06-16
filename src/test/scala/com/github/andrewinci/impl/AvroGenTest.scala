@@ -175,11 +175,11 @@ class AvroGenTest extends FunSuite {
         | }}
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val leaf = Range(0, 3)
-      .map(i => i -> AvroFieldGeneratorLeaf(_ => Right(s"test$i")))
-      .map(l => AvroFieldGeneratorNode(l._1.toString, l._2).asInstanceOf[AvroFieldGenerator])
-      .reduce((g1, g2) => compose(g1, g2))
-    val fieldGenerator = AvroFieldGeneratorNode("original", leaf)
+    val fieldGenerator = AvroFieldGenerator.fromMap(
+      "original.0" -> (_ => Right("test0")),
+      "original.1" -> (_ => Right("test1")),
+      "original.2" -> (_ => Right("test2"))
+    )
 
     val sut = AvroGen(fieldGenerator)
     // act

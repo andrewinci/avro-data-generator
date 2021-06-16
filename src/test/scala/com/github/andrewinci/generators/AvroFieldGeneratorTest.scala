@@ -1,6 +1,5 @@
 package com.github.andrewinci.generators
 
-import com.github.andrewinci.generators.AvroFieldGenerator.FieldNameToAvroGen
 import munit.FunSuite
 import org.apache.avro.Schema
 
@@ -29,5 +28,32 @@ class AvroFieldGeneratorTest extends FunSuite {
     assertEquals(leafA.get.generate(schema), Right("a"))
     assertEquals(leafB.get.generate(schema), Right("b"))
     assertEquals(leafC.get.generate(schema), Right("c"))
+  }
+
+  test("Happy path - fromMap - shared keys") {
+    // arrange
+
+    // act
+    val gen = AvroFieldGenerator.fromMap(
+      "a1.a2.a3" -> (_ => Right("A")),
+      "a1.a2.b3" -> (_ => Right("B")),
+      "a2.c2.a3" -> (_ => Right("C")),
+      "a2.c2.b3" -> (_ => Right("D"))
+    )
+
+    // assert
+    val leafA = gen.getGenerator("a1").flatMap(_.getGenerator("a2")).flatMap(_.getGenerator("a3"))
+    val leafB = gen.getGenerator("a1").flatMap(_.getGenerator("a2")).flatMap(_.getGenerator("b3"))
+    val leafC = gen.getGenerator("a2").flatMap(_.getGenerator("c2")).flatMap(_.getGenerator("a3"))
+    val leafD = gen.getGenerator("a2").flatMap(_.getGenerator("c2")).flatMap(_.getGenerator("b3"))
+
+    assert(leafA.nonEmpty)
+    assert(leafB.nonEmpty)
+    assert(leafC.nonEmpty)
+    assert(leafD.nonEmpty)
+    assertEquals(leafA.get.generate(null), Right("A"))
+    assertEquals(leafB.get.generate(null), Right("B"))
+    assertEquals(leafC.get.generate(null), Right("C"))
+    assertEquals(leafD.get.generate(null), Right("D"))
   }
 }
