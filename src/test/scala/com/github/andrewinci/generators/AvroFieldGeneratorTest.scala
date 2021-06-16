@@ -1,6 +1,6 @@
 package com.github.andrewinci.generators
 
-import com.github.andrewinci.generators.AvroFieldGenerator.AvroFieldGeneratorMap
+import com.github.andrewinci.generators.AvroFieldGenerator.FieldNameToAvroGen
 import munit.FunSuite
 import org.apache.avro.Schema
 
@@ -10,14 +10,13 @@ class AvroFieldGeneratorTest extends FunSuite {
     // arrange
     val sampleSchema = """{"type": "record", "name": "myrec","fields": [{ "name": "original", "type": "string" }]}"""
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val genMap: AvroFieldGeneratorMap = Map(
+
+    // act
+    val gen = AvroFieldGenerator.fromMap(
       "a1.a2.a3" -> (_ => Right("a")),
       "b1.b2.b3" -> (_ => Right("b")),
       "c1.c2.c3" -> (_ => Right("c"))
     )
-
-    // act
-    val gen = AvroFieldGenerator.fromMap(genMap)
 
     // assert
     val leafA = gen.getGenerator("a1").flatMap(_.getGenerator("a2")).flatMap(_.getGenerator("a3"))

@@ -3,7 +3,7 @@ package com.github.andrewinci.core
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericRecord
 
-trait AvroGenerator {
+trait AvroRecordGenerator {
 
   /** Generate an avro record
     *
