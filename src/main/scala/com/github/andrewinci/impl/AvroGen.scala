@@ -8,6 +8,7 @@ import org.apache.avro.Schema
 import org.apache.avro.Schema.Type
 import org.apache.avro.generic.GenericRecord
 import org.apache.avro.generic.GenericData
+import scala.collection.JavaConverters._
 
 class AvroGen(val fieldGenerator: AvroFieldGenerator) extends AvroGenerator {
 
@@ -20,6 +21,10 @@ class AvroGen(val fieldGenerator: AvroFieldGenerator) extends AvroGenerator {
     if (schema.getType != Type.RECORD)
       Left(new AvroGeneratorException("Only RECORD is supported"))
     else generateRecord(schema, fieldGenerator)
+
+  def validate[A](record: A, schema: Schema): Either[AvroGeneratorException, A] =
+    if (new GenericData().validate(schema, record)) Right(record)
+    else Left(new AvroGeneratorException(s"Invalid avro generated"))
 
   def generateRecord(
       schema: Schema,
@@ -36,16 +41,21 @@ class AvroGen(val fieldGenerator: AvroFieldGenerator) extends AvroGenerator {
         case None => return Left(new AvroGeneratorException(s"No generator specified for field ${field.name()}"))
       }
     })
-    if (new GenericData().validate(schema, record))
-      Right(record)
-    else Left(new AvroGeneratorException(s"Invalid avro generated"))
+    validate(record, schema)
   }
+
+  def generateUnion(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] =
+    schema.getTypes.asScala
+      .map(generateValue(_, fieldGenerator))
+      .map(_.flatMap(validate(_, schema)))
+      .find(_.isRight)
+      .getOrElse(Left(new AvroGeneratorException("Unable to build any value in the UNION")))
 
   def generateValue(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] = {
     schema.getType match {
       // complex data types
       case Type.RECORD => generateRecord(schema, fieldGenerator)
-      case Type.UNION  => Left(new NotImplementedException("UNION type not supported"))
+      case Type.UNION  => generateUnion(schema, fieldGenerator)
       case Type.MAP    => Left(new NotImplementedException("MAP type not supported"))
       case Type.ARRAY  => Left(new NotImplementedException("ARRAY type not supported"))
       case Type.FIXED  => Left(new NotImplementedException("FIXED type not supported"))
