@@ -2,7 +2,7 @@ package com.github.andrewinci.impl
 
 import com.github.andrewinci.core.AvroFieldGeneratorLeaf
 import com.github.andrewinci.core.AvroFieldGeneratorNode
-import com.github.andrewinci.generators.ConstFieldGen
+import com.github.andrewinci.generators.ConstAvroFieldGenerator
 import munit.FunSuite
 import org.apache.avro.Schema
 
@@ -12,7 +12,7 @@ class AvroGenTest extends FunSuite {
     // arrange
     val sampleSchema = """{"type": "record", "name": "myrec","fields": [{ "name": "original", "type": "string" }]}"""
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstFieldGen(constStr = "hello1")
+    val fieldGenerator = new ConstAvroFieldGenerator(constStr = "hello1")
     val sut = AvroGen(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
@@ -29,7 +29,7 @@ class AvroGenTest extends FunSuite {
         |{ "name": "nested", "type": "string" }]}
         |}]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstFieldGen(constStr = "hello")
+    val fieldGenerator = new ConstAvroFieldGenerator(constStr = "hello")
 
     val sut = AvroGen(fieldGenerator)
     // act
@@ -50,7 +50,7 @@ class AvroGenTest extends FunSuite {
         |}}
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstFieldGen(constStr = "hello1")
+    val fieldGenerator = new ConstAvroFieldGenerator(constStr = "hello1")
     val sut = AvroGen(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)

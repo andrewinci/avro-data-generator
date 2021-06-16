@@ -10,7 +10,7 @@ import org.apache.avro.generic.GenericData
 
 import java.nio.ByteBuffer
 
-class ConstFieldGen(
+class ConstAvroFieldGenerator(
     constStr: String = "",
     constInt: Int = 0,
     constDecimal: BigDecimal = 0.1,

@@ -1,12 +1,12 @@
-package com.github.andrewinci.impl
+package com.github.andrewinci.generators
 
-import com.github.andrewinci.generators.ConstFieldGen
+import com.github.andrewinci.impl.AvroGen
 import munit.FunSuite
 import org.apache.avro.Schema
 
 import java.nio.ByteBuffer
 
-class ConstFieldGenTest extends FunSuite {
+class ConstAvroFieldGeneratorTest extends FunSuite {
   test("Gen nested record happy path") {
     // arrange
     val sampleSchema =
@@ -19,7 +19,7 @@ class ConstFieldGenTest extends FunSuite {
             }
         }]}"""
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstFieldGen(constDecimal = 12.23)
+    val fieldGenerator = new ConstAvroFieldGenerator(constDecimal = 12.23)
 
     val sut = AvroGen(fieldGenerator)
     // act
