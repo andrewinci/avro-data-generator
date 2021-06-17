@@ -2,11 +2,11 @@ package com.github.andrewinci.generators
 
 import com.github.andrewinci.core.AvroFieldGenerator
 import com.github.andrewinci.core.FieldGeneratorException
+import com.github.andrewinci.generators.helpers.AvroFieldGeneratorHelper.avroEnumPicker
 import org.apache.avro.LogicalTypes.Decimal
 import org.apache.avro.Conversions
 import org.apache.avro.Schema
 import org.apache.avro.Schema.Type
-import org.apache.avro.generic.GenericData
 
 import java.nio.ByteBuffer
 
@@ -25,9 +25,9 @@ class ConstAvroFieldGenerator(
       case None =>
         schema.getType match {
           case Type.RECORD | Type.ARRAY | Type.MAP | Type.UNION | Type.FIXED =>
-            Left(new FieldGeneratorException(s"Unable to generate a field of type ${schema.getType.getName}"))
+            Left(new FieldGeneratorException(s"Unable to generate a field for complex type ${schema.getType.getName}"))
           // only primitive types are supported
-          case Type.ENUM    => Right(new GenericData.EnumSymbol(schema, schema.getEnumSymbols.get(0)))
+          case Type.ENUM    => avroEnumPicker(schema)(_.headOption)
           case Type.BYTES   => Right(ByteBuffer.wrap(constBytes))
           case Type.STRING  => Right(constStr)
           case Type.INT     => Right(constInt)

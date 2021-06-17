@@ -27,4 +27,12 @@ lazy val root = Project(_repoName, file("."))
   .settings((Compile / compile) := ((Compile / compile) dependsOn scalafmtCheckAll).value)
   .settings(publishSettings)
   .settings(
-    scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-Xfatal-warnings", "-language:higherKinds"))
+    scalacOptions ++= Seq(
+      "-Ypartial-unification",
+      "-unchecked",
+      "-deprecation",
+      "-feature",
+      "-Xfatal-warnings",
+      "-language:higherKinds"
+    )
+  )

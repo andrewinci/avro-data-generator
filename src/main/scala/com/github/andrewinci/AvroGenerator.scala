@@ -22,11 +22,11 @@ class AvroGenerator(val fieldGenerator: AvroFieldGenerator) extends AvroRecordGe
     if (schema.getType != Type.RECORD) Left(new AvroGeneratorException("Only RECORD is supported"))
     else generateRecord(schema, fieldGenerator)
 
-  def validate[A](record: A, schema: Schema): Either[AvroGeneratorException, A] =
+  private def validate[A](record: A, schema: Schema): Either[AvroGeneratorException, A] =
     if (new GenericData().validate(schema, record)) Right(record)
     else Left(new AvroGeneratorException(s"Invalid avro generated"))
 
-  def generateRecord(
+  private def generateRecord(
       schema: Schema,
       fieldGenerator: AvroFieldGenerator
   ): Either[AvroGeneratorException, GenericRecord] = {
@@ -44,14 +44,14 @@ class AvroGenerator(val fieldGenerator: AvroFieldGenerator) extends AvroRecordGe
     validate(record, schema)
   }
 
-  def generateUnion(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] =
+  private def generateUnion(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] =
     schema.getTypes.asScala
       .map(generateValue(_, fieldGenerator))
       .map(_.flatMap(validate(_, schema)))
       .find(_.isRight)
       .getOrElse(Left(new AvroGeneratorException("Unable to build any value in the UNION")))
 
-  def generateArray(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] = {
+  private def generateArray(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] = {
     val res = Stream
       .from(0)
       .map(i => fieldGenerator.getGenerator(i.toString))
@@ -62,7 +62,7 @@ class AvroGenerator(val fieldGenerator: AvroFieldGenerator) extends AvroRecordGe
     else Right(seqAsJavaList(res.map(_.right.get)))
   }
 
-  def generateValue(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] = {
+  private def generateValue(schema: Schema, fieldGenerator: AvroFieldGenerator): Either[AvroGeneratorException, Any] = {
     schema.getType match {
       // complex data types
       case Type.RECORD => generateRecord(schema, fieldGenerator)
