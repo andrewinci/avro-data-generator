@@ -31,7 +31,7 @@ class ConstAvroFieldGenerator(
           case Type.BYTES   => Right(ByteBuffer.wrap(constBytes))
           case Type.STRING  => Right(constStr)
           case Type.INT     => Right(constInt)
-          case Type.LONG    => Right(constInt)
+          case Type.LONG    => Right(constInt.toLong)
           case Type.FLOAT   => Right(constDecimal.toFloat)
           case Type.DOUBLE  => Right(constDecimal.toDouble)
           case Type.BOOLEAN => Right(constBoolean)
