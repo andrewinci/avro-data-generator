@@ -17,7 +17,10 @@ class ConstAvroFieldGen(
     constBoolean: Boolean = true,
     constBytes: Array[Byte] = Array[Byte](1.toByte, 2.toByte, 3, 4)
 ) extends AvroFieldGenerator {
-  override def getGenerator(fieldName: String): Option[AvroFieldGenerator] = Some(this)
+
+  override def getGenerator(fieldName: String): Option[AvroFieldGenerator] =
+    // avoid infinite loop for array. Any array will have size 1
+    if (fieldName == "1") None else Some(this)
 
   override def generate(schema: Schema): Either[FieldGeneratorException, Any] =
     Option(schema.getLogicalType) match {

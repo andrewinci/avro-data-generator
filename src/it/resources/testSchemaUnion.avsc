@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "TestSchemaUnion",
+  "fields": [
+    { "name": "unionTypes", "type": ["string", "boolean"]},
+    { "name": "unionOptional", "type": ["string", "null"]},
+    { "name": "unionRecords", "type": [{"type": "record", "name": "TestSchemaUnion0", "fields": [
+      { "name": "testLong0", "type": "long"},
+      { "name": "testFloat0", "type": "float"},
+      { "name": "testDouble0", "type": "double"},
+      { "name": "testString0", "type": "string"}]},
+      {"type": "record", "name": "TestSchemaUnion1", "fields": [
+        { "name": "testNull1", "type": "null"},
+        { "name": "testBoolean1", "type": "boolean"},
+        { "name": "testInt1", "type": "int"},
+        { "name": "testString1", "type": "string"}]}
+    ]}
+  ]
+}

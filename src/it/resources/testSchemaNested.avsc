@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "TestSchemaNested",
+  "fields": [
+    { "name": "testString", "type": "string"},
+    { "name": "nestedRecord", "type": {"type": "record", "name": "TestSchemaNested2", "fields": [
+        { "name": "testBooleanNested", "type": "boolean"},
+        { "name": "nested2Record", "type": {"type": "record", "name": "TestSchemaNested3", "fields": [
+          { "name": "testDoubleNested2", "type": "double"}
+        ]}}
+      ]}}
+  ]
+}
