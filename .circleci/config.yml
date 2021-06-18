@@ -49,7 +49,7 @@ jobs:
             - v1-dependencies-
       - run:
           name: Run tests
-          command: sbt clean coverage test
+          command: sbt clean coverage test IntegrationTest/test
       - when:
           condition: << parameters.publish >>
           steps:

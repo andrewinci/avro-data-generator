@@ -1,6 +1,6 @@
 {
   "template": "https://github.com/andrewinci/scala-library-template.git",
-  "commit": "8d5670efd3c7d4171adf0fa75fd3f2a0d1a7b877",
+  "commit": "8e99676ff937135bdf42db541d77518780dfc67f",
   "checkout": null,
   "context": {
     "cookiecutter": {
