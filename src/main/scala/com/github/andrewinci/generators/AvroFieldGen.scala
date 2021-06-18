@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.apache.avro.Schema
 import scala.util.Try
 
-object AvroFieldGenerator {
+object AvroFieldGen {
   import com.github.andrewinci.core.AvroFieldGenerator
 
   type FieldNameToAvroGen = (String, (Schema) => Either[FieldGeneratorException, Any])
@@ -24,5 +24,5 @@ object AvroFieldGenerator {
 
   def fromJson(jsonString: String): Either[Throwable, AvroFieldGenerator] = Try {
     new ObjectMapper().readTree(jsonString)
-  }.map(j => JsonAvroFieldGenerator(j)).toEither
+  }.map(j => JsonAvroFieldGen(j)).toEither
 }

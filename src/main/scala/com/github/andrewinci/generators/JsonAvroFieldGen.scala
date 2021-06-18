@@ -8,14 +8,14 @@ import com.github.andrewinci.generators.helpers.AvroFieldGeneratorLeaf
 import org.apache.avro.Schema
 import org.apache.avro.Schema.Type
 
-class JsonAvroFieldGenerator(json: JsonNode) extends AvroFieldGenerator {
+class JsonAvroFieldGen(json: JsonNode) extends AvroFieldGenerator {
 
   def unsupportedField(field: String) = Left(new FieldGeneratorException(s"Field $field not supported"))
   def invalidField(field: String) = Left(new FieldGeneratorException(s"Invalid $field type"))
 
   override def getGenerator(fieldName: String): Option[AvroFieldGenerator] = {
     val field = json.get(fieldName)
-    if (field.isObject) Some(JsonAvroFieldGenerator(field))
+    if (field.isObject) Some(JsonAvroFieldGen(field))
     else
       Some(
         AvroFieldGeneratorLeaf(schema =>
@@ -41,9 +41,9 @@ class JsonAvroFieldGenerator(json: JsonNode) extends AvroFieldGenerator {
   }
 
   override def generate(schema: Schema): Either[FieldGeneratorException, Any] =
-    EmptyAvroFieldGenerator.generate(schema)
+    EmptyAvroFieldGen.generate(schema)
 }
 
-object JsonAvroFieldGenerator {
-  def apply(jsonNode: JsonNode) = new JsonAvroFieldGenerator(jsonNode)
+object JsonAvroFieldGen {
+  def apply(jsonNode: JsonNode) = new JsonAvroFieldGen(jsonNode)
 }

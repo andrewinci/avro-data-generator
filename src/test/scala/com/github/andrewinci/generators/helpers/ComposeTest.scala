@@ -1,8 +1,8 @@
 package com.github.andrewinci.generators.helpers
 
 import com.github.andrewinci.AvroGenerator
-import com.github.andrewinci.generators.AvroFieldGenerator
-import com.github.andrewinci.generators.ConstAvroFieldGenerator
+import com.github.andrewinci.generators.AvroFieldGen
+import com.github.andrewinci.generators.ConstAvroFieldGen
 import com.github.andrewinci.generators.helpers.Compose.compose
 import munit.FunSuite
 import org.apache.avro.Schema
@@ -17,8 +17,8 @@ class ComposeTest extends FunSuite {
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = compose(
-      AvroFieldGenerator.fromMap("f1" -> (_ => Right("test"))),
-      new ConstAvroFieldGenerator(constStr = "default")
+      AvroFieldGen.fromMap("f1" -> (_ => Right("test"))),
+      new ConstAvroFieldGen(constStr = "default")
     )
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -39,8 +39,8 @@ class ComposeTest extends FunSuite {
         |}]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = compose(
-      AvroFieldGenerator.fromMap("original.nested1" -> (_ => Right("test"))),
-      new ConstAvroFieldGenerator(constInt = 123)
+      AvroFieldGen.fromMap("original.nested1" -> (_ => Right("test"))),
+      new ConstAvroFieldGen(constInt = 123)
     )
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -58,8 +58,8 @@ class ComposeTest extends FunSuite {
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = compose(
-      AvroFieldGenerator.fromMap("original" -> (_ => Right(false))),
-      new ConstAvroFieldGenerator(constStr = "str")
+      AvroFieldGen.fromMap("original" -> (_ => Right(false))),
+      new ConstAvroFieldGen(constStr = "str")
     )
 
     val sut = AvroGenerator(fieldGenerator)
@@ -78,8 +78,8 @@ class ComposeTest extends FunSuite {
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
     val fieldGenerator = compose(
-      new ConstAvroFieldGenerator(constStr = "str"),
-      AvroFieldGenerator.fromMap("original" -> (_ => Right(false)))
+      new ConstAvroFieldGen(constStr = "str"),
+      AvroFieldGen.fromMap("original" -> (_ => Right(false)))
     )
 
     val sut = AvroGenerator(fieldGenerator)

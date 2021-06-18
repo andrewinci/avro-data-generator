@@ -4,7 +4,7 @@ import com.github.andrewinci.AvroGenerator
 import munit.FunSuite
 import org.apache.avro.Schema
 
-class JsonAvroFieldGeneratorTest extends FunSuite {
+class JsonAvroFieldGenTest extends FunSuite {
 
   test("Happy path - fromJson - primitive types") {
     val sampleSchema =
@@ -20,7 +20,7 @@ class JsonAvroFieldGeneratorTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGenerator
+    val gen = AvroFieldGen
       .fromJson("""
                   |{
                   |"testNull": null,
@@ -46,29 +46,6 @@ class JsonAvroFieldGeneratorTest extends FunSuite {
     )
   }
 
-  test("Happy path - fromJson - bytes") {
-    val sampleSchema =
-      """{"type": "record", "name": "myrec","fields": [
-        |{ "name": "testBytes", "type": "bytes"}
-        |]}""".stripMargin
-    val schema: Schema = new Schema.Parser().parse(sampleSchema)
-
-    // act
-    val gen = AvroFieldGenerator.fromJson("""{"testBytes": YW55IGNhcm5hbCBwbGVhcw== }""")
-
-    // assert
-    val res = gen
-      .map(AvroGenerator(_))
-      .flatMap(_.generateRecord(schema))
-
-    assertEquals(
-      res.map(_.toString),
-      Right(
-        """{"testBytes": "0x00"}"""
-      )
-    )
-  }
-
   test("Happy path - fromJson - enum") {
     val sampleSchema =
       """{"type": "record", "name": "myrec","fields": [
@@ -81,7 +58,7 @@ class JsonAvroFieldGeneratorTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGenerator.fromJson("""{"test": "CLUBS" }""")
+    val gen = AvroFieldGen.fromJson("""{"test": "CLUBS" }""")
 
     // assert
     val res = gen
@@ -108,7 +85,7 @@ class JsonAvroFieldGeneratorTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGenerator.fromJson("""{"test": "TEST" }""")
+    val gen = AvroFieldGen.fromJson("""{"test": "TEST" }""")
 
     // assert
     val res = gen

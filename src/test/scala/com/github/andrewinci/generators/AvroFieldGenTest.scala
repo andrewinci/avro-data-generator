@@ -3,7 +3,7 @@ package com.github.andrewinci.generators
 import munit.FunSuite
 import org.apache.avro.Schema
 
-class AvroFieldGeneratorTest extends FunSuite {
+class AvroFieldGenTest extends FunSuite {
 
   test("Happy path - fromMap") {
     // arrange
@@ -11,7 +11,7 @@ class AvroFieldGeneratorTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGenerator.fromMap(
+    val gen = AvroFieldGen.fromMap(
       "a1.a2.a3" -> (_ => Right("a")),
       "b1.b2.b3" -> (_ => Right("b")),
       "c1.c2.c3" -> (_ => Right("c"))
@@ -34,7 +34,7 @@ class AvroFieldGeneratorTest extends FunSuite {
     // arrange
 
     // act
-    val gen = AvroFieldGenerator.fromMap(
+    val gen = AvroFieldGen.fromMap(
       "a1.a2.a3" -> (_ => Right("A")),
       "a1.a2.b3" -> (_ => Right("B")),
       "a2.c2.a3" -> (_ => Right("C")),
