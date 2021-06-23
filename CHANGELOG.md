@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/andrewinci/avro-data-generator/compare/v1.2.0...v1.3.0) (2021-06-23)
+
+
+### Features
+
+* Add integration tests ([30f1b58](https://github.com/andrewinci/avro-data-generator/commit/30f1b583430ac7fcb432f1c92e4aa5f7cbd75919))
+* Add json generator ([c853edc](https://github.com/andrewinci/avro-data-generator/commit/c853edc045df784f4aa55daba1b7ca90eab472d5))
+* Support array in json generator ([4b0cb72](https://github.com/andrewinci/avro-data-generator/commit/4b0cb720d46377dbe9de9d01f0294307c233f782))
+* Support logical types in constAvro gen ([f3e7b4b](https://github.com/andrewinci/avro-data-generator/commit/f3e7b4bef241ddc800b141ae96fa64d2f78cad8a))
+
+
+### Bug Fixes
+
+* const field generator generates invalid long fields ([5d24e4f](https://github.com/andrewinci/avro-data-generator/commit/5d24e4f339c30e2e99d8c67c9a0f61eee0fe208b))
+
 ## [1.2.0](https://github.com/andrewinci/avro-data-generator/compare/v1.1.0...v1.2.0) (2021-06-16)
 
 
