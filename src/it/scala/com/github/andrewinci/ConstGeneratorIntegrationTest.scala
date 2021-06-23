@@ -50,4 +50,15 @@ class ConstGeneratorIntegrationTest extends FunSuite {
     // assert
     assert(res.isRight)
   }
+
+  test("Test constant avro generator - logical types") {
+    // arrange
+    val schema = new Schema.Parser().parse(Source.fromResource("testSchemaLogicalTypes.avsc").mkString)
+    val fieldGenerator = new ConstAvroFieldGen()
+    val generator = AvroGenerator(fieldGenerator)
+    // act
+    val res = generator.generateRecord(schema)
+    // assert
+    assert(res.isRight)
+  }
 }
