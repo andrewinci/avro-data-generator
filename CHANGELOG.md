@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/andrewinci/avro-data-generator/compare/v1.3.0...v1.4.0) (2021-06-25)
+
+
+### Features
+
+* Add generic record to json ([e896aad](https://github.com/andrewinci/avro-data-generator/commit/e896aad1f6f6e7501292375b72470e23d99b7323))
+* Support logic types in avro json gen ([f4ff22c](https://github.com/andrewinci/avro-data-generator/commit/f4ff22c93ce23453eddbb299ce959724a03b3ef3))
+
 ## [1.3.0](https://github.com/andrewinci/avro-data-generator/compare/v1.2.0...v1.3.0) (2021-06-23)
 
 
