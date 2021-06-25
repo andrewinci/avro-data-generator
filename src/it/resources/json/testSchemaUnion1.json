@@ -1,0 +1,10 @@
+{
+  "unionTypes": "true",
+  "unionOptional": "null",
+  "unionRecords": {
+    "testNull1": null,
+    "testBoolean1": false,
+    "testInt1": 123,
+    "testString1": "str test 1"
+  }
+}

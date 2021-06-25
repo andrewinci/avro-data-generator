@@ -12,8 +12,8 @@
           { "name": "testLong", "type": "long"},
           { "name": "testFloat", "type": "float"},
           { "name": "testDouble", "type": "double"},
-          { "name": "testString", "type": "string"},
-          { "name": "testByte", "type": "bytes"}
+          { "name": "testString", "type": "string"}
+          //{ "name": "testByte", "type": "bytes"}
         ]}}
     }
   ]

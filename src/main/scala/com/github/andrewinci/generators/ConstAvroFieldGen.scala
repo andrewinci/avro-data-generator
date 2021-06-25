@@ -11,18 +11,10 @@ import org.apache.avro.LogicalTypes.TimeMicros
 import org.apache.avro.LogicalTypes.TimeMillis
 import org.apache.avro.LogicalTypes.TimestampMicros
 import org.apache.avro.LogicalTypes.TimestampMillis
-import org.apache.avro.Conversions
 import org.apache.avro.LogicalType
 import org.apache.avro.LogicalTypes
 import org.apache.avro.Schema
 import org.apache.avro.Schema.Type
-import org.apache.avro.data.TimeConversions.DateConversion
-import org.apache.avro.data.TimeConversions.LocalTimestampMicrosConversion
-import org.apache.avro.data.TimeConversions.LocalTimestampMillisConversion
-import org.apache.avro.data.TimeConversions.TimeMicrosConversion
-import org.apache.avro.data.TimeConversions.TimeMillisConversion
-import org.apache.avro.data.TimeConversions.TimestampMicrosConversion
-import org.apache.avro.data.TimeConversions.TimestampMillisConversion
 
 import java.nio.ByteBuffer
 import java.time.Instant
@@ -42,7 +34,7 @@ class ConstAvroFieldGen(
     constLocalTime: LocalTime = LocalTime.now(),
     constLocalDateTime: LocalDateTime = LocalDateTime.now(),
     constInstant: Instant = Instant.now()
-) extends AvroFieldGenerator {
+) extends AvroFieldGen {
 
   override def getGenerator(fieldName: String): Option[AvroFieldGenerator] =
     // avoid infinite loop for array. Any array will have size 1
@@ -73,53 +65,16 @@ class ConstAvroFieldGen(
 
   private def handleLogicalType(schema: Schema, logicalType: LogicalType) =
     logicalType match {
-      case _: Decimal              => getDecimal(schema, logicalType)
-      case _: Date                 => getDate(schema, logicalType)
-      case _: TimeMillis           => getTimeMillis(schema, logicalType)
-      case _: TimeMicros           => getTimeMicros(schema, logicalType)
-      case _: TimestampMillis      => getTimestampMicros(schema, logicalType)
-      case _: TimestampMicros      => getTimestampMicros(schema, logicalType)
-      case _: LocalTimestampMillis => getLocalTimestampMicros(schema, logicalType)
-      case _: LocalTimestampMicros => getLocalTimestampMicros(schema, logicalType)
+      case _: Decimal              => getDecimal(constDecimal.bigDecimal, schema, logicalType)
+      case _: Date                 => getDate(constLocalDate, schema, logicalType)
+      case _: TimeMillis           => getTimeMillis(constLocalTime, schema, logicalType)
+      case _: TimeMicros           => getTimeMicros(constLocalTime, schema, logicalType)
+      case _: TimestampMillis      => getTimestampMicros(constInstant, schema, logicalType)
+      case _: TimestampMicros      => getTimestampMicros(constInstant, schema, logicalType)
+      case _: LocalTimestampMillis => getLocalTimestampMicros(constLocalDateTime, schema, logicalType)
+      case _: LocalTimestampMicros => getLocalTimestampMicros(constLocalDateTime, schema, logicalType)
       case _ =>
-        if (logicalType == LogicalTypes.uuid()) getUUID(schema, logicalType)
+        if (logicalType == LogicalTypes.uuid()) getUUID(constUUID, schema, logicalType)
         else unableToGenerateFieldForLogicalTypeException(schema, logicalType)
     }
-
-  def unableToGenerateComplexTypeException(schema: Schema) =
-    Left(new FieldGeneratorException(s"Unable to generate a field for complex type ${schema.getType.getName}"))
-
-  def unableToGenerateFieldForLogicalTypeException(schema: Schema, logicalType: LogicalType) =
-    Left(
-      new FieldGeneratorException(
-        s"Unable to generate a field for logical type ${schema.getType.getName}:${logicalType.getName}"
-      )
-    )
-
-  def getDecimal(schema: Schema, logicalType: LogicalType) =
-    Right(new Conversions.DecimalConversion().toBytes(constDecimal.bigDecimal, schema, logicalType))
-
-  def getDate(schema: Schema, logicalType: LogicalType) =
-    Right(new DateConversion().toInt(constLocalDate, schema, logicalType))
-
-  def getTimeMillis(schema: Schema, logicalType: LogicalType) =
-    Right(new TimeMillisConversion().toInt(constLocalTime, schema, logicalType))
-
-  def getTimeMicros(schema: Schema, logicalType: LogicalType) =
-    Right(new TimeMicrosConversion().toLong(constLocalTime, schema, logicalType))
-
-  def getTimestampMillis(schema: Schema, logicalType: LogicalType) =
-    Right(new TimestampMillisConversion().toLong(constInstant, schema, logicalType))
-
-  def getTimestampMicros(schema: Schema, logicalType: LogicalType) =
-    Right(new TimestampMicrosConversion().toLong(constInstant, schema, logicalType))
-
-  def getLocalTimestampMillis(schema: Schema, logicalType: LogicalType) =
-    Right(new LocalTimestampMillisConversion().toLong(constLocalDateTime, schema, logicalType))
-
-  def getLocalTimestampMicros(schema: Schema, logicalType: LogicalType) =
-    Right(new LocalTimestampMicrosConversion().toLong(constLocalDateTime, schema, logicalType))
-
-  def getUUID(schema: Schema, logicalType: LogicalType) =
-    Right(new Conversions.UUIDConversion().toCharSequence(constUUID, schema, logicalType))
 }

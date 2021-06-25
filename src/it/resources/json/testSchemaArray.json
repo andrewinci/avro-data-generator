@@ -1,0 +1,13 @@
+{
+  "testArray": [
+    {
+      "testNull": null,
+      "testBoolean": true,
+      "testInt": 1,
+      "testLong": 23123123,
+      "testFloat": 1.2,
+      "testDouble": 1.23,
+      "testString": "123123"
+    }
+  ]
+}

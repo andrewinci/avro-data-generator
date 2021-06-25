@@ -36,7 +36,7 @@ class AvroGenerator(val fieldGenerator: AvroFieldGenerator) extends AvroRecordGe
         case Some(gen) =>
           generateValue(field.schema(), gen) match {
             case Right(value) => record.put(field.name(), value)
-            case Left(e)      => return Left(new AvroGeneratorException(s"Unable to set value for ${field.name()}", e))
+            case Left(e)      => return Left(new AvroGeneratorException(s"Unable to set value for ${field.name()}", Some(e)))
           }
         case None => return Left(new AvroGeneratorException(s"No generator specified for field ${field.name()}"))
       }

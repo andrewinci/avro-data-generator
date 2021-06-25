@@ -1,0 +1,9 @@
+{
+  "testString": "test",
+  "nestedRecord": {
+    "testBooleanNested": true,
+    "nested2Record": {
+      "testDoubleNested2": 1.23
+    }
+  }
+}

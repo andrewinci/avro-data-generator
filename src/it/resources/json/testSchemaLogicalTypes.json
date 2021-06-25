@@ -1,0 +1,11 @@
+{
+  "decimal": 12.32,
+  "uuid": "123e4567-e89b-12d3-a456-426614174000",
+  "date": "2007-12-03",
+  "timeMillis": "10:15:30",
+  "timeMicros": "10:15:30",
+  "timestampMillis": "2007-12-03T10:15:30Z",
+  "timestampMicros": "2007-12-03T10:15:30Z",
+  "localTimestampMillis": "2007-12-03T10:15:30",
+  "localTimestampMicros": "2007-12-03T10:15:30"
+}
