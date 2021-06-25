@@ -13,3 +13,11 @@ githubTokenSource := TokenSource.GitConfig("github.token") || TokenSource.Enviro
 externalResolvers += "avro-data-generator" at "https://maven.pkg.github.com/andrewinci/avro-data-generator",
 libraryDependencies += "com.github.andrewinci" %% "avro-data-generator" % "<latest version>"
 ```
+
+## Development
+
+Use `sbt scalafmtAll` to format the code.
+
+Use `sbt test` to run the tests
+
+Use `sbt IntegrationTest / test` to run the integration tests
