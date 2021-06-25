@@ -26,6 +26,7 @@ import org.apache.avro.generic.GenericRecord
 import scala.collection.convert.Wrappers.SeqWrapper
 import scala.collection.JavaConverters._
 import java.nio.ByteBuffer
+import java.util.Base64
 import scala.util.Success
 import scala.util.Try
 
@@ -85,8 +86,8 @@ object AvroToJson {
       case Type.BOOLEAN => jsonFactory.booleanNode(data.asInstanceOf[Boolean])
       case Type.NULL    => jsonFactory.nullNode()
       //      case  Type.MAP | Type.FIXED =>
-      //      case Type.BYTES   => Right(ByteBuffer.wrap(constBytes))
-      case _ => throw new Exception("Unsupported")
+      case Type.BYTES => jsonFactory.textNode(Base64.getEncoder.encodeToString(data.asInstanceOf[ByteBuffer].array()))
+      case _          => throw new Exception("Unsupported")
     }
 
   //

@@ -19,10 +19,12 @@ import org.apache.avro.LogicalType
 import org.apache.avro.LogicalTypes
 
 import java.math.BigDecimal
+import java.nio.ByteBuffer
 import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.Base64
 import java.util.UUID
 import scala.util.Failure
 import scala.util.Success
@@ -55,7 +57,7 @@ class JsonAvroFieldGen(json: JsonNode) extends AvroFieldGen {
     schema.getType match {
       case Type.RECORD | Type.ARRAY | Type.MAP | Type.UNION | Type.FIXED => unableToGenerateComplexTypeException(schema)
       // only primitive types are supported
-      case Type.BYTES   => unsupportedField("BYTES")
+      case Type.BYTES   => parseBase64(field.textValue())
       case Type.ENUM    => avroEnumPicker(schema)(_.find(field.textValue() == _))
       case Type.INT     => Right(field.numberValue().intValue())
       case Type.LONG    => Right(field.numberValue().longValue())
@@ -64,6 +66,12 @@ class JsonAvroFieldGen(json: JsonNode) extends AvroFieldGen {
       case Type.STRING  => Right(field.textValue())
       case Type.BOOLEAN => Right(field.booleanValue())
       case Type.NULL    => Right(null)
+    }
+
+  private def parseBase64(v: String) =
+    Try { ByteBuffer.wrap(Base64.getDecoder.decode(v)) } match {
+      case Success(v) => Right(v)
+      case Failure(e) => Left(new FieldGeneratorException(s"Unable to parser the field $v to BYTES", Some(e)))
     }
 
   private def handleLogicalType(

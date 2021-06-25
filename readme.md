@@ -24,6 +24,6 @@ Use `sbt IntegrationTest / test` to run the integration tests
 
 
 ## TODO
-- [ ] JsonGen - Bytes
+- [x] JsonGen - Bytes
 - [ ] Map types
 - [ ] Fixed types

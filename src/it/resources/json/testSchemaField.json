@@ -5,5 +5,6 @@
   "testLong": 23123123,
   "testFloat": 1.2,
   "testDouble": 1.23,
-  "testString": "123123"
+  "testString": "123123",
+  "testBytes": "ZWFzdXJlLg=="
 }
