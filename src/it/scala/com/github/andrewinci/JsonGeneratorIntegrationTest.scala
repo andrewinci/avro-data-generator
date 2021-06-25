@@ -1,6 +1,7 @@
 package com.github.andrewinci
 
 import com.github.andrewinci.generators.AvroFieldGen
+import com.github.andrewinci.helper.AvroToJson
 import munit.FunSuite
 import org.apache.avro.Schema
 import org.apache.avro.io.DecoderFactory
@@ -26,12 +27,14 @@ class JsonGeneratorIntegrationTest extends FunSuite {
       val generator = AvroGenerator(fieldGenerator)
       // act
       val res = generator.generateRecord(schema)
-      import org.apache.avro.io.EncoderFactory
 
       // assert
       assert(res.isRight, s"Gen output should be right instead ${res.left.get}")
-      //todo: enable
-      //assertEquals(normalizeJson(res.right.get.toString), normalizeJson(json), "Invalid content generated")
+      assertEquals(
+        res.map(AvroToJson.parseRecord(_).toString).map(normalizeJson).right.get,
+        normalizeJson(json),
+        "Invalid content generated"
+      )
     }
   }
 
@@ -45,15 +48,4 @@ class JsonGeneratorIntegrationTest extends FunSuite {
     "testSchemaLogicalTypes.avsc",
     "json/testSchemaLogicalTypes.json"
   )
-
-//  test("Test constant avro generator - logical types") {
-//    // arrange
-//    val schema = new Schema.Parser().parse(Source.fromResource("testSchemaLogicalTypes.avsc").mkString)
-//    val fieldGenerator = new ConstAvroFieldGen()
-//    val generator = AvroGenerator(fieldGenerator)
-//    // act
-//    val res = generator.generateRecord(schema)
-//    // assert
-//    assert(res.isRight)
-//  }
 }
