@@ -1,12 +1,5 @@
 val _repoName = "avro-data-generator"
-val _githubOwner = "andrewinci"
 val _organization = "com.github.andrewinci"
-
-lazy val publishSettings = Seq(
-  githubOwner := _githubOwner,
-  githubRepository := _repoName,
-  githubTokenSource := TokenSource.GitConfig("github.token") || TokenSource.Environment("GITHUB_TOKEN")
-)
 
 lazy val default = Seq(
   organization := _organization,
@@ -25,7 +18,6 @@ lazy val root = Project(_repoName, file("."))
   .settings(dependencyOverrides ++= Dependencies.overrides)
   .settings(testFrameworks += new TestFramework("munit.Framework"))
   .settings((Compile / compile) := ((Compile / compile) dependsOn scalafmtCheckAll).value)
-  .settings(publishSettings)
   .settings(
     scalacOptions ++= Seq(
       "-Ypartial-unification",

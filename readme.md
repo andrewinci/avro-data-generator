@@ -2,16 +2,10 @@
 
 ## Get started
 
-Add `sbt-github-packages` to the `project/plugin.sbt`:
-```scala
-addSbtPlugin("com.codecommit" % "sbt-github-packages" % "0.5.3")
-```
-
 Update the `build.sbt` with the following:
 ```scala
-githubTokenSource := TokenSource.GitConfig("github.token") || TokenSource.Environment("GITHUB_TOKEN"),
-externalResolvers += "avro-data-generator" at "https://maven.pkg.github.com/andrewinci/avro-data-generator",
-libraryDependencies += "com.github.andrewinci" %% "avro-data-generator" % "<latest version>"
+resolvers += "jitpack" at "https://jitpack.io",
+libraryDependencies += "com.github.andrewinci" % "avro-data-generator" % "2.0.0"
 ```
 
 ## Development

@@ -50,12 +50,6 @@ jobs:
       - run:
           name: Run tests
           command: sbt clean coverage test IntegrationTest/test
-      - when:
-          condition: << parameters.publish >>
-          steps:
-            - run:
-                name: Publish
-                command: sbt "set version := \"$(echo $CIRCLE_TAG | cut -c 2- )\"" publish
       # Add the env COVERALLS_REPO_TOKEN=my-token to the circleci build env
       # to enable code coverage reporting
       #      - run:
@@ -82,11 +76,3 @@ workflows:
       - standard-version:
           requires:
             - CI
-      - build:
-          name: Release
-          publish: true
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v\d+\.\d+\.\d+$/
