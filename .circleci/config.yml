@@ -50,18 +50,15 @@ jobs:
       - run:
           name: Run tests
           command: sbt clean coverage test IntegrationTest/test
-      # Add the env COVERALLS_REPO_TOKEN=my-token to the circleci build env
-      # to enable code coverage reporting
-      #      - run:
-      #          name: Collect coverage
-      #          command: sbt coverageReport coveralls
+      - run:
+          name: Collect coverage
+          command: sbt coverageReport coveralls
       - save_cache:
           paths:
             - ~/.sbt
           key: v2-dependencies-{{ checksum "build.sbt" }}
-      # Add SNYK_TOKEN in circle ci to enable the scan
-      #      - snyk/scan:
-      #          severity-threshold: high
+      - snyk/scan:
+          severity-threshold: high
 
 workflows:
   version: 2

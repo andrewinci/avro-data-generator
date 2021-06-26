@@ -1,4 +1,9 @@
 # avro-data-generator
+![Coveralls](https://img.shields.io/coveralls/github/andrewinci/avro-data-generator)
+![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/andrewinci/avro-data-generator)
+![CircleCI](https://img.shields.io/circleci/build/github/andrewinci/avro-data-generator)
+[![](https://jitpack.io/v/andrewinci/avro-data-generator.svg)](https://jitpack.io/#andrewinci/avro-data-generator)
+
 Generic avro records generators
 
 The core components of this library are the `AvroGenerator` and `AvroFieldGenerator`.
