@@ -4,7 +4,7 @@ import com.github.andrewinci.core.AvroFieldGenerator
 import com.github.andrewinci.core.FieldGeneratorException
 import org.apache.avro.Schema
 
-object EmptyAvroFieldGen extends AvroFieldGenerator {
+object EmptyAvroFieldGenerator extends AvroFieldGenerator {
   override def getGenerator(fieldName: String): Option[AvroFieldGenerator] = None
 
   override def generate(schema: Schema): Either[FieldGeneratorException, Any] =

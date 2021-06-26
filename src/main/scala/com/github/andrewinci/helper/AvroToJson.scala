@@ -26,6 +26,10 @@ import org.apache.avro.generic.GenericRecord
 import scala.collection.convert.Wrappers.SeqWrapper
 import scala.collection.JavaConverters._
 import java.nio.ByteBuffer
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.Base64
 import scala.util.Success
 import scala.util.Try
@@ -114,28 +118,28 @@ object AvroToJson {
     }
   }
 
-  def getDecimal(bigDecimal: ByteBuffer, schema: Schema, logicalType: LogicalType) =
+  def getDecimal(bigDecimal: ByteBuffer, schema: Schema, logicalType: LogicalType): java.math.BigDecimal =
     new Conversions.DecimalConversion().fromBytes(bigDecimal, schema, logicalType)
 
-  def getDate(value: Int, schema: Schema, logicalType: LogicalType) =
+  def getDate(value: Int, schema: Schema, logicalType: LogicalType): LocalDate =
     new DateConversion().fromInt(value, schema, logicalType)
 
-  def getTimeMillis(value: Int, schema: Schema, logicalType: LogicalType) =
+  def getTimeMillis(value: Int, schema: Schema, logicalType: LogicalType): LocalTime =
     new TimeMillisConversion().fromInt(value, schema, logicalType)
 
-  def getTimeMicros(value: Long, schema: Schema, logicalType: LogicalType) =
+  def getTimeMicros(value: Long, schema: Schema, logicalType: LogicalType): LocalTime =
     new TimeMicrosConversion().fromLong(value, schema, logicalType)
 
-  def getTimestampMillis(value: Long, schema: Schema, logicalType: LogicalType) =
+  def getTimestampMillis(value: Long, schema: Schema, logicalType: LogicalType): Instant =
     new TimestampMillisConversion().fromLong(value, schema, logicalType)
 
-  def getTimestampMicros(value: Long, schema: Schema, logicalType: LogicalType) =
+  def getTimestampMicros(value: Long, schema: Schema, logicalType: LogicalType): Instant =
     new TimestampMicrosConversion().fromLong(value, schema, logicalType)
 
-  def getLocalTimestampMillis(value: Long, schema: Schema, logicalType: LogicalType) =
+  def getLocalTimestampMillis(value: Long, schema: Schema, logicalType: LogicalType): LocalDateTime =
     new LocalTimestampMillisConversion().fromLong(value, schema, logicalType)
 
-  def getLocalTimestampMicros(value: Long, schema: Schema, logicalType: LogicalType) =
+  def getLocalTimestampMicros(value: Long, schema: Schema, logicalType: LogicalType): LocalDateTime =
     new LocalTimestampMicrosConversion().fromLong(value, schema, logicalType)
 
 }

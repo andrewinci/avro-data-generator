@@ -1,7 +1,7 @@
 package com.github.andrewinci
 
-import com.github.andrewinci.generators.AvroFieldGen
-import com.github.andrewinci.generators.ConstAvroFieldGen
+import com.github.andrewinci.generators.AvroFieldGenerators
+import com.github.andrewinci.generators.ConstAvroFieldGenerator
 import munit.FunSuite
 import org.apache.avro.Schema
 
@@ -11,7 +11,7 @@ class AvroGeneratorTest extends FunSuite {
     // arrange
     val sampleSchema = """{"type": "record", "name": "myrec","fields": [{ "name": "original", "type": "string" }]}"""
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstAvroFieldGen(constStr = "hello1")
+    val fieldGenerator = new ConstAvroFieldGenerator(constStr = "hello1")
     val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
@@ -28,7 +28,7 @@ class AvroGeneratorTest extends FunSuite {
         |{ "name": "nested", "type": "string" }]}
         |}]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstAvroFieldGen(constStr = "hello")
+    val fieldGenerator = new ConstAvroFieldGenerator(constStr = "hello")
 
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -49,7 +49,7 @@ class AvroGeneratorTest extends FunSuite {
         |}}
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstAvroFieldGen(constStr = "hello1")
+    val fieldGenerator = new ConstAvroFieldGenerator(constStr = "hello1")
     val sut = AvroGenerator(fieldGenerator)
     // act
     val record = sut.generateRecord(schema)
@@ -65,7 +65,7 @@ class AvroGeneratorTest extends FunSuite {
         |{ "name": "original", "type": ["string", "boolean"] }
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = AvroFieldGen.fromMap("original" -> (_ => Right(false)))
+    val fieldGenerator = AvroFieldGenerators.fromMap("original" -> (_ => Right(false)))
 
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -82,7 +82,7 @@ class AvroGeneratorTest extends FunSuite {
         |{ "name": "original", "type": ["string", "boolean"] }
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = AvroFieldGen.fromMap("original" -> (_ => Right(1.6)))
+    val fieldGenerator = AvroFieldGenerators.fromMap("original" -> (_ => Right(1.6)))
 
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -98,7 +98,7 @@ class AvroGeneratorTest extends FunSuite {
         |{ "name": "original", "type": ["string", "boolean"] }
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = AvroFieldGen.fromMap("unlistedField" -> (_ => Right(1.6)))
+    val fieldGenerator = AvroFieldGenerators.fromMap("unlistedField" -> (_ => Right(1.6)))
 
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -114,7 +114,7 @@ class AvroGeneratorTest extends FunSuite {
         |{ "name": "original", "type": ["string", "int"] }
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = AvroFieldGen.fromMap("original" -> (_ => Right("1231")))
+    val fieldGenerator = AvroFieldGenerators.fromMap("original" -> (_ => Right("1231")))
 
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -131,7 +131,7 @@ class AvroGeneratorTest extends FunSuite {
         |{ "name": "original", "type": ["string", "null"] }
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = AvroFieldGen.fromMap("original" -> (_ => Right(null)))
+    val fieldGenerator = AvroFieldGenerators.fromMap("original" -> (_ => Right(null)))
 
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -151,7 +151,7 @@ class AvroGeneratorTest extends FunSuite {
         | }}
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = AvroFieldGen.fromMap("original.0" -> (_ => Right("test1")))
+    val fieldGenerator = AvroFieldGenerators.fromMap("original.0" -> (_ => Right("test1")))
 
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -171,7 +171,7 @@ class AvroGeneratorTest extends FunSuite {
         | }}
         |]}""".stripMargin
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = AvroFieldGen.fromMap(
+    val fieldGenerator = AvroFieldGenerators.fromMap(
       "original.0" -> (_ => Right("test0")),
       "original.1" -> (_ => Right("test1")),
       "original.2" -> (_ => Right("test2"))

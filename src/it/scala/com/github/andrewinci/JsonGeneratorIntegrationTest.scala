@@ -1,14 +1,10 @@
 package com.github.andrewinci
 
-import com.github.andrewinci.generators.AvroFieldGen
+import com.github.andrewinci.generators.AvroFieldGenerators
 import com.github.andrewinci.helper.AvroToJson
 import munit.FunSuite
 import org.apache.avro.Schema
-import org.apache.avro.io.DecoderFactory
-import org.apache.avro.io.JsonDecoder
-import org.apache.avro.io.JsonEncoder
 
-import java.io.ByteArrayOutputStream
 import scala.io.Source
 
 class JsonGeneratorIntegrationTest extends FunSuite {
@@ -23,7 +19,7 @@ class JsonGeneratorIntegrationTest extends FunSuite {
       def normalizeJson(json: String): String = json.replace("\n", "").replace(" ", "")
       val json = Source.fromResource(expectedResPath).mkString
       val schema = new Schema.Parser().parse(Source.fromResource(schemaPath).mkString)
-      val fieldGenerator = AvroFieldGen.fromJson(json).right.get
+      val fieldGenerator = AvroFieldGenerators.fromJson(json).right.get
       val generator = AvroGenerator(fieldGenerator)
       // act
       val res = generator.generateRecord(schema)

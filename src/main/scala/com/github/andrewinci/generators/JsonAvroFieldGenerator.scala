@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.github.andrewinci.core.AvroFieldGenerator
 import com.github.andrewinci.core.FieldGeneratorException
 import com.github.andrewinci.generators.helpers.AvroFieldGeneratorHelper.avroEnumPicker
+import com.github.andrewinci.generators.helpers.AvroFieldGeneratorBase
 import com.github.andrewinci.generators.helpers.AvroFieldGeneratorLeaf
 import org.apache.avro.Schema
 import org.apache.avro.Schema.Type
@@ -30,17 +31,17 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-class JsonAvroFieldGen(json: JsonNode) extends AvroFieldGen {
+class JsonAvroFieldGenerator(json: JsonNode) extends AvroFieldGeneratorBase {
 
   def unsupportedField(field: String) = Left(new FieldGeneratorException(s"Field $field not supported"))
   def invalidField(field: String) = Left(new FieldGeneratorException(s"Invalid $field type"))
 
-  override def generate(schema: Schema): Either[FieldGeneratorException, Any] = EmptyAvroFieldGen.generate(schema)
+  override def generate(schema: Schema): Either[FieldGeneratorException, Any] = EmptyAvroFieldGenerator.generate(schema)
 
   override def getGenerator(fieldName: String): Option[AvroFieldGenerator] = {
     Option(if (json.isArray) json.get(fieldName.toInt) else json.get(fieldName))
       .map(field => {
-        if (field.isObject || field.isArray) JsonAvroFieldGen(field)
+        if (field.isObject || field.isArray) JsonAvroFieldGenerator(field)
         else
           AvroFieldGeneratorLeaf(schema =>
             Option(schema.getLogicalType) match {
@@ -100,6 +101,6 @@ class JsonAvroFieldGen(json: JsonNode) extends AvroFieldGen {
     }
 }
 
-object JsonAvroFieldGen {
-  def apply(jsonNode: JsonNode) = new JsonAvroFieldGen(jsonNode)
+object JsonAvroFieldGenerator {
+  def apply(jsonNode: JsonNode) = new JsonAvroFieldGenerator(jsonNode)
 }

@@ -6,7 +6,7 @@ import org.apache.avro.Schema
 
 import java.nio.ByteBuffer
 
-class ConstAvroFieldGenTest extends FunSuite {
+class ConstAvroFieldGeneratorTest extends FunSuite {
   test("Gen nested record happy path") {
     // arrange
     val sampleSchema =
@@ -19,7 +19,7 @@ class ConstAvroFieldGenTest extends FunSuite {
             }
         }]}"""
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstAvroFieldGen(constDecimal = 12.23)
+    val fieldGenerator = new ConstAvroFieldGenerator(constDecimal = 12.23)
 
     val sut = AvroGenerator(fieldGenerator)
     // act
@@ -36,7 +36,7 @@ class ConstAvroFieldGenTest extends FunSuite {
         { "name": "original", "type": "long"}
         ]}"""
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
-    val fieldGenerator = new ConstAvroFieldGen(constInt = 123)
+    val fieldGenerator = new ConstAvroFieldGenerator(constInt = 123)
 
     val sut = AvroGenerator(fieldGenerator)
     // act

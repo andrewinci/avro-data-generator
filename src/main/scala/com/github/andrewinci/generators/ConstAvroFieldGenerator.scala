@@ -2,6 +2,7 @@ package com.github.andrewinci.generators
 
 import com.github.andrewinci.core.AvroFieldGenerator
 import com.github.andrewinci.core.FieldGeneratorException
+import com.github.andrewinci.generators.helpers.AvroFieldGeneratorBase
 import com.github.andrewinci.generators.helpers.AvroFieldGeneratorHelper.avroEnumPicker
 import org.apache.avro.LogicalTypes.Date
 import org.apache.avro.LogicalTypes.Decimal
@@ -23,7 +24,7 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.UUID
 
-class ConstAvroFieldGen(
+class ConstAvroFieldGenerator(
     constStr: String = "",
     constInt: Int = 0,
     constDecimal: BigDecimal = 0.1,
@@ -34,7 +35,7 @@ class ConstAvroFieldGen(
     constLocalTime: LocalTime = LocalTime.now(),
     constLocalDateTime: LocalDateTime = LocalDateTime.now(),
     constInstant: Instant = Instant.now()
-) extends AvroFieldGen {
+) extends AvroFieldGeneratorBase {
 
   override def getGenerator(fieldName: String): Option[AvroFieldGenerator] =
     // avoid infinite loop for array. Any array will have size 1

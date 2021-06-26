@@ -4,7 +4,7 @@ import com.github.andrewinci.AvroGenerator
 import munit.FunSuite
 import org.apache.avro.Schema
 
-class JsonAvroFieldGenTest extends FunSuite {
+class JsonAvroFieldGeneratorTest extends FunSuite {
 
   test("Happy path - fromJson - primitive types") {
     val sampleSchema =
@@ -20,7 +20,7 @@ class JsonAvroFieldGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGen
+    val gen = AvroFieldGenerators
       .fromJson("""
                   |{
                   |"testNull": null,
@@ -56,7 +56,7 @@ class JsonAvroFieldGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGen.fromJson("""{"test": "CLUBS" }""")
+    val gen = AvroFieldGenerators.fromJson("""{"test": "CLUBS" }""")
 
     // assert
     val res = gen.map(AvroGenerator(_)).flatMap(_.generateRecord(schema))
@@ -76,7 +76,7 @@ class JsonAvroFieldGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGen.fromJson("""{"test": "TEST" }""")
+    val gen = AvroFieldGenerators.fromJson("""{"test": "TEST" }""")
 
     // assert
     val res = gen.map(AvroGenerator(_)).flatMap(_.generateRecord(schema))
@@ -92,7 +92,7 @@ class JsonAvroFieldGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGen.fromJson("""{"test": ["A", "B", "C"]}""")
+    val gen = AvroFieldGenerators.fromJson("""{"test": ["A", "B", "C"]}""")
 
     // assert
     val res = gen.map(AvroGenerator(_)).flatMap(_.generateRecord(schema))
@@ -108,7 +108,7 @@ class JsonAvroFieldGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGen.fromJson("""{"test": []}""")
+    val gen = AvroFieldGenerators.fromJson("""{"test": []}""")
 
     // assert
     val res = gen.map(AvroGenerator(_)).flatMap(_.generateRecord(schema))
@@ -129,7 +129,7 @@ class JsonAvroFieldGenTest extends FunSuite {
     val schema: Schema = new Schema.Parser().parse(sampleSchema)
 
     // act
-    val gen = AvroFieldGen.fromJson("""{"test": [{"testString": "123", "testBoolean": true}]}""")
+    val gen = AvroFieldGenerators.fromJson("""{"test": [{"testString": "123", "testBoolean": true}]}""")
 
     // assert
     val res = gen.map(AvroGenerator(_)).flatMap(_.generateRecord(schema))

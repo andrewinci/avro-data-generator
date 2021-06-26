@@ -1,6 +1,6 @@
 package com.github.andrewinci
 
-import com.github.andrewinci.generators.AvroFieldGen
+import com.github.andrewinci.generators.AvroFieldGenerators
 import munit.FunSuite
 import org.apache.avro.Schema
 
@@ -15,7 +15,7 @@ class ConstGeneratorIntegrationTest extends FunSuite {
     test(name) {
       // arrange
       val schema = new Schema.Parser().parse(Source.fromResource(schemaPath).mkString)
-      val fieldGenerator = AvroFieldGen.constantFieldsGen()
+      val fieldGenerator = AvroFieldGenerators.constantFieldsGen()
       val generator = AvroGenerator(fieldGenerator)
       // act
       val res = generator.generateRecord(schema)
